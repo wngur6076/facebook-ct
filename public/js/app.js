@@ -1847,6 +1847,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _Nav__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./Nav */ "./resources/js/components/Nav.vue");
 /* harmony import */ var _Sidebar__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./Sidebar */ "./resources/js/components/Sidebar.vue");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 //
 //
 //
@@ -1861,6 +1868,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+
 
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -1869,8 +1878,19 @@ __webpack_require__.r(__webpack_exports__);
     Nav: _Nav__WEBPACK_IMPORTED_MODULE_0__.default,
     Sidebar: _Sidebar__WEBPACK_IMPORTED_MODULE_1__.default
   },
+  computed: _objectSpread({}, (0,vuex__WEBPACK_IMPORTED_MODULE_2__.mapGetters)({
+    authUserStatus: 'authUserStatus'
+  })),
   mounted: function mounted() {
     this.$store.dispatch('fetchAuthUser');
+  },
+  created: function created() {
+    this.$store.dispatch('setPageTitle', this.$route.meta.title);
+  },
+  watch: {
+    $route: function $route(to, from) {
+      this.$store.dispatch('setPageTitle', to.meta.title);
+    }
   }
 });
 
@@ -2285,11 +2305,17 @@ vue__WEBPACK_IMPORTED_MODULE_3__.default.use(vue_router__WEBPACK_IMPORTED_MODULE
   routes: [{
     path: '/',
     name: 'home',
-    component: _views_NewsFeed__WEBPACK_IMPORTED_MODULE_1__.default
+    component: _views_NewsFeed__WEBPACK_IMPORTED_MODULE_1__.default,
+    meta: {
+      title: 'News Feed'
+    }
   }, {
     path: '/users/:userId',
     name: 'user.show',
-    component: _views_Users_Show__WEBPACK_IMPORTED_MODULE_2__.default
+    component: _views_Users_Show__WEBPACK_IMPORTED_MODULE_2__.default,
+    meta: {
+      title: 'Profile'
+    }
   }]
 }));
 
@@ -2306,18 +2332,62 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
-/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
-/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm.js");
+/* harmony import */ var vuex__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! vuex */ "./node_modules/vuex/dist/vuex.esm.js");
 /* harmony import */ var _modules_user__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./modules/user */ "./resources/js/store/modules/user.js");
+/* harmony import */ var _modules_title__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./modules/title */ "./resources/js/store/modules/title.js");
 
 
 
-vue__WEBPACK_IMPORTED_MODULE_1__.default.use(vuex__WEBPACK_IMPORTED_MODULE_2__.default);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_2__.default.Store({
+
+vue__WEBPACK_IMPORTED_MODULE_2__.default.use(vuex__WEBPACK_IMPORTED_MODULE_3__.default);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (new vuex__WEBPACK_IMPORTED_MODULE_3__.default.Store({
   modules: {
-    User: _modules_user__WEBPACK_IMPORTED_MODULE_0__.default
+    User: _modules_user__WEBPACK_IMPORTED_MODULE_0__.default,
+    Title: _modules_title__WEBPACK_IMPORTED_MODULE_1__.default
   }
 }));
+
+/***/ }),
+
+/***/ "./resources/js/store/modules/title.js":
+/*!*********************************************!*\
+  !*** ./resources/js/store/modules/title.js ***!
+  \*********************************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+var state = {
+  title: 'Welcome'
+};
+var getters = {
+  pageTitle: function pageTitle(state) {
+    return state.title;
+  }
+};
+var actions = {
+  setPageTitle: function setPageTitle(_ref, title) {
+    var commit = _ref.commit,
+        state = _ref.state;
+    commit('setTitle', title);
+  }
+};
+var mutations = {
+  setTitle: function setTitle(state, title) {
+    state.title = title + ' | Facbook';
+    document.title = state.title;
+  }
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
+  state: state,
+  getters: getters,
+  actions: actions,
+  mutations: mutations
+});
 
 /***/ }),
 
@@ -2334,11 +2404,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 var state = {
   user: null,
-  userStatus: null
+  userStatus: true
 };
 var getters = {
   authUser: function authUser(state) {
     return state.user;
+  },
+  authUserStatus: function authUserStatus(state) {
+    return state.userStatus;
   }
 };
 var actions = {
@@ -2349,12 +2422,17 @@ var actions = {
       commit('setAuthUser', res.data);
     })["catch"](function (error) {
       console.log('Unable to fetch auth user');
+    })["finally"](function () {
+      commit('setAuthUserStatus', false);
     });
   }
 };
 var mutations = {
   setAuthUser: function setAuthUser(state, user) {
     state.user = user;
+  },
+  setAuthUserStatus: function setAuthUserStatus(state, userStatus) {
+    state.userStatus = userStatus;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -38327,7 +38405,7 @@ var render = function() {
     "div",
     { staticClass: "flex flex-col flex-1 h-screen overflow-y-hidden" },
     [
-      _c("Nav"),
+      _vm.authUserStatus ? _c("p", [_vm._v("Loading AuthUser...")]) : _c("Nav"),
       _vm._v(" "),
       _c(
         "div",
