@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use App\Http\Resources\User as UserResource;
 
-class UserController extends Controller
+class UsersController extends Controller
 {
     public function show(User $user)
     {

@@ -48,10 +48,4 @@ class UserCanViewProfileTest extends TestCase
                 ]
             ]);
     }
-
-    /** @test */
-    function  a()
-    {
-
-    }
 }

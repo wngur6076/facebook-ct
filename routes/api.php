@@ -1,19 +1,20 @@
 <?php
 
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\PostController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostsController;
+use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\UserPostsController;
+use App\Http\Controllers\FriendRequestController;
 
 Route::middleware('auth:api')->group(function () {
 
     Route::get('auth-user', [AuthUserController::class, 'show']);
 
     Route::apiResources([
-        '/posts' => PostController::class,
-        '/users' => UserController::class,
+        '/posts' => PostsController::class,
+        '/users' => UsersController::class,
         '/users/{user}/posts' => UserPostsController::class,
+        '/friend-request' => FriendRequestController::class,
     ]);
 });
