@@ -19,7 +19,7 @@ class UserCanViewProfileTest extends TestCase
         $this->actingAs($user = User::factory()->create(), 'api');
         $post = Post::factory()->create(['user_id' => $user->id]);
 
-        $response = $this->get('/api/user/'.$user->id.'/posts');
+        $response = $this->get('/api/users/'.$user->id.'/posts');
 
         $response->assertStatus(200)
             ->assertJson([
