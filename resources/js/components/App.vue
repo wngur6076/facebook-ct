@@ -1,13 +1,12 @@
 <template>
-    <div class="flex flex-col flex-1 h-screen overflow-y-hidden">
-        <p v-if="authUserStatus">Loading AuthUser...</p>
-        <Nav v-else/>
+    <div class="flex flex-col flex-1 h-screen overflow-y-hidden" v-if="authUser">
+        <Nav/>
 
         <div class="flex overflow-y-hidden flex-1">
             <Sidebar />
 
             <div class="overflow-x-hidden w-2/3">
-                <router-view></router-view>
+                <router-view :key="$route.fullPath"></router-view>
             </div>
         </div>
     </div>
@@ -28,7 +27,7 @@
 
         computed: {
             ...mapGetters({
-                authUserStatus: 'authUserStatus'
+                authUser: 'authUser',
             })
         },
 

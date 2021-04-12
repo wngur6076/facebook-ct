@@ -2,6 +2,7 @@
 
 namespace Tests\Feature;
 
+use App\Models\Friend;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
@@ -16,7 +17,15 @@ class RetrievePostsTest extends TestCase
     {
         $this->withoutExceptionHandling();
         $this->actingAs($user = User::factory()->create(), 'api');
-        $posts = Post::factory(2)->create(['user_id' => $user->id]);
+        $anotherUser = User::factory()->create();
+        $posts = Post::factory(2)->create(['user_id' => $anotherUser->id]);
+        Friend::create([
+            'user_id' => $user->id,
+            'friend_id' => $anotherUser->id,
+            'confirmed_at' => now(),
+            'status' => 1,
+        ]);
+
 
         $response = $this->get('/api/posts');
 
