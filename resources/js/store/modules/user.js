@@ -1,16 +1,12 @@
 const state = {
     user: null,
-    userStatus: true,
+    userStatus: null,
 };
 
 const getters = {
     authUser: state => {
         return state.user;
     },
-
-    authUserStatus: state => {
-        return state.userStatus;
-    }
 };
 
 const actions = {
@@ -21,21 +17,14 @@ const actions = {
             })
             .catch(error => {
                 console.log('Unable to fetch auth user');
-            })
-            .finally(() => {
-                commit('setAuthUserStatus', false);
             });
-    }
+    },
 };
 
 const mutations = {
     setAuthUser(state, user) {
         state.user = user;
     },
-
-    setAuthUserStatus(state, userStatus) {
-        state.userStatus = userStatus;
-    }
 };
 
 export default {
