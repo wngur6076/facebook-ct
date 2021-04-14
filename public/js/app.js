@@ -2070,6 +2070,8 @@ __webpack_require__.r(__webpack_exports__);
 //
 //
 //
+//
+//
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "Post",
   props: ['post']
@@ -2395,6 +2397,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_0__);
+
 var state = {
   newsPosts: null,
   newsPostsStatus: null,
@@ -2418,7 +2423,7 @@ var actions = {
     var commit = _ref.commit,
         state = _ref.state;
     commit('setPostsStatus', 'loading');
-    axios.get('/api/posts').then(function (res) {
+    axios__WEBPACK_IMPORTED_MODULE_0___default().get('/api/posts').then(function (res) {
       commit('setPosts', res.data);
       commit('setPostsStatus', 'success');
     })["catch"](function (error) {
@@ -2429,11 +2434,21 @@ var actions = {
     var commit = _ref2.commit,
         state = _ref2.state;
     commit('setPostsStatus', 'loading');
-    axios.post('/api/posts', {
+    axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/posts', {
       body: state.postMessage
     }).then(function (res) {
       commit('pushPost', res.data);
       commit('updateMessage', '');
+    })["catch"](function (error) {});
+  },
+  likePost: function likePost(_ref3, data) {
+    var commit = _ref3.commit,
+        state = _ref3.state;
+    axios__WEBPACK_IMPORTED_MODULE_0___default().post('/api/posts/' + data.postId + '/like').then(function (res) {
+      commit('pushLikes', {
+        likes: res.data,
+        postKey: data.postKey
+      });
     })["catch"](function (error) {});
   }
 };
@@ -2449,6 +2464,9 @@ var mutations = {
   },
   pushPost: function pushPost(state, post) {
     state.newsPosts.data.unshift(post);
+  },
+  pushLikes: function pushLikes(state, data) {
+    state.newsPosts.data[data.postKey].data.attributes.likes = data.likes;
   }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
@@ -39187,7 +39205,11 @@ var render = function() {
               ]
             ),
             _vm._v(" "),
-            _c("p", [_vm._v("Jane Smith and 137 others")])
+            _c("p", [
+              _vm._v(
+                _vm._s(_vm.post.data.attributes.likes.like_count) + " likes"
+              )
+            ])
           ]),
           _vm._v(" "),
           _vm._m(1)
@@ -39202,7 +39224,20 @@ var render = function() {
             "button",
             {
               staticClass:
-                "flex justify-center py-2 rounded-lg text-sm text-gray-700 w-full hover:bg-gray-200"
+                "flex justify-center py-2 rounded-lg text-sm w-full focus:outline-none",
+              class: [
+                _vm.post.data.attributes.likes.user_likes_post
+                  ? "bg-blue-600 text-white"
+                  : ""
+              ],
+              on: {
+                click: function($event) {
+                  return _vm.$store.dispatch("likePost", {
+                    postId: _vm.post.data.post_id,
+                    postKey: _vm.$vnode.key
+                  })
+                }
+              }
             },
             [
               _c(
@@ -39355,8 +39390,8 @@ var render = function() {
       _vm._v(" "),
       _vm.newsStatus.postsStatus === "loading"
         ? _c("p", [_vm._v("Loading posts...")])
-        : _vm._l(_vm.posts.data, function(post) {
-            return _c("Post", { key: post.data.post_id, attrs: { post: post } })
+        : _vm._l(_vm.posts.data, function(post, postKey) {
+            return _c("Post", { key: postKey, attrs: { post: post } })
           })
     ],
     2
