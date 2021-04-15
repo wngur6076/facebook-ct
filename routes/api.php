@@ -6,6 +6,7 @@ use App\Http\Controllers\UsersController;
 use App\Http\Controllers\AuthUserController;
 use App\Http\Controllers\PostLikeController;
 use App\Http\Controllers\UserPostsController;
+use App\Http\Controllers\PostCommentController;
 use App\Http\Controllers\FriendRequestController;
 use App\Http\Controllers\FriendRequestResponseController;
 
@@ -16,6 +17,7 @@ Route::middleware('auth:api')->group(function () {
     Route::apiResources([
         '/posts' => PostsController::class,
         '/posts/{post}/like' => PostLikeController::class,
+        '/posts/{post}/comment' => PostCommentController::class,
         '/users' => UsersController::class,
         '/users/{user}/posts' => UserPostsController::class,
         '/friend-request' => FriendRequestController::class,
