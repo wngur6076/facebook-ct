@@ -1,18 +1,18 @@
 import axios from 'axios';
 
 const state = {
-    newsPosts: null,
-    newsPostsStatus: null,
+    posts: null,
+    postsStatus: null,
     postMessage: '',
 };
 
 const getters = {
-    newsPosts: state => {
-        return state.newsPosts;
+    posts: state => {
+        return state.posts;
     },
     newsStatus: state => {
         return {
-            newsPostsStatus: state.newsPostsStatus,
+            postsStatus: state.postsStatus,
         }
     },
     postMessage: state => {
@@ -33,6 +33,18 @@ const actions = {
                 commit('setPostsStatus', 'error');
             });
     },
+    fetchUserPosts({commit, state}, userId) {
+        commit('setPostsStatus', 'loading');
+
+        axios.get('/api/users/' + userId + '/posts')
+                .then(res => {
+                    commit('setPosts', res.data);
+                    commit('setPostsStatus', 'success');
+                })
+                .catch(error => {
+                    commit('setPostsStatus', 'error');
+                });
+    },
     postMessage({commit, state}) {
         commit('setPostsStatus', 'loading');
 
@@ -51,25 +63,36 @@ const actions = {
             })
             .catch(error => {
             });
-    }
+    },
+    commentPost({commit, state}, data) {
+        axios.post('/api/posts/'+ data.postId +'/comment', { body: data.body })
+            .then(res => {
+                commit('pushcomments', { comments: res.data, postKey: data.postKey });
+            })
+            .catch(error => {
+            });
+    },
 };
 
 const mutations = {
     setPosts(state, posts) {
-        state.newsPosts = posts;
+        state.posts = posts;
     },
     setPostsStatus(state, status) {
-        state.newsPostsStatus = status;
+        state.postsStatus = status;
     },
     updateMessage(state, message) {
         state.postMessage = message;
     },
     pushPost(state, post) {
-        state.newsPosts.data.unshift(post);
+        state.posts.data.unshift(post);
     },
     pushLikes(state, data) {
-        state.newsPosts.data[data.postKey].data.attributes.likes = data.likes;
-    }
+        state.posts.data[data.postKey].data.attributes.likes = data.likes;
+    },
+    pushcomments(state, data) {
+        state.posts.data[data.postKey].data.attributes.comments = data.comments;
+    },
 };
 
 export default {
