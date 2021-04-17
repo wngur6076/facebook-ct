@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class UserImage extends JsonResource
@@ -13,7 +14,7 @@ class UserImage extends JsonResource
                 'type' => 'user-images',
                 'user_image_id' => $this->id,
                 'attributes' => [
-                    'path' => url($this->path),
+                    'path' => Storage::disk('public')->url($this->path),
                     'width' => $this->width,
                     'height' => $this->height,
                     'location' => $this->location,

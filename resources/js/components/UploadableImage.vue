@@ -1,9 +1,9 @@
 <template>
     <div>
-        <img src="https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAxMjZfMTgy%2FMDAxNjExNjU1NjM5Mzkz.uee4orVZJ36mO39lNFv1CXXf5RLS5BlNVQA-hoKgpcgg.WaLAO9f4OH97Opu-LDlS34pN2fvDgt5UZJJw7rL5mpkg.JPEG.hey_ordinary%2FIMG_1381.jpg&type=sc960_832"
-            alt="user background image"
+        <img :src="imageObject.data.attributes.path"
+            :alt="alt"
             ref="userImage"
-            class="object-cover w-full">
+            :class="classes">
     </div>
 </template>
 
@@ -13,14 +13,18 @@ export default {
     name: "UploadableImage",
 
     props: [
+        'userImage',
         'imageWidth',
         'imageHeight',
         'location',
+        'classes',
+        'alt'
     ],
 
     data() {
         return {
             dropzone: null,
+            uploadedImage: null,
         }
     },
 
@@ -43,9 +47,13 @@ export default {
                     'X-CSRF-TOKEN': document.head.querySelector('meta[name=csrf-token]').content
                 },
                 success: (e, res) => {
-                    alert('uploaded!')
+                    this.uploadedImage = res;
                 }
             }
+        },
+
+        imageObject() {
+            return this.uploadedImage || this.userImage;
         }
     }
 }

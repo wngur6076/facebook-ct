@@ -2164,10 +2164,11 @@ __webpack_require__.r(__webpack_exports__);
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
   name: "UploadableImage",
-  props: ['imageWidth', 'imageHeight', 'location'],
+  props: ['userImage', 'imageWidth', 'imageHeight', 'location', 'classes', 'alt'],
   data: function data() {
     return {
-      dropzone: null
+      dropzone: null,
+      uploadedImage: null
     };
   },
   mounted: function mounted() {
@@ -2175,6 +2176,8 @@ __webpack_require__.r(__webpack_exports__);
   },
   computed: {
     settings: function settings() {
+      var _this = this;
+
       return {
         paramName: 'image',
         url: '/api/user-images',
@@ -2188,9 +2191,12 @@ __webpack_require__.r(__webpack_exports__);
           'X-CSRF-TOKEN': document.head.querySelector('meta[name=csrf-token]').content
         },
         success: function success(e, res) {
-          alert('uploaded!');
+          _this.uploadedImage = res;
         }
       };
+    },
+    imageObject: function imageObject() {
+      return this.uploadedImage || this.userImage;
     }
   }
 });
@@ -2267,6 +2273,15 @@ function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { va
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -50140,12 +50155,8 @@ var render = function() {
   return _c("div", [
     _c("img", {
       ref: "userImage",
-      staticClass: "object-cover w-full",
-      attrs: {
-        src:
-          "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMTAxMjZfMTgy%2FMDAxNjExNjU1NjM5Mzkz.uee4orVZJ36mO39lNFv1CXXf5RLS5BlNVQA-hoKgpcgg.WaLAO9f4OH97Opu-LDlS34pN2fvDgt5UZJJw7rL5mpkg.JPEG.hey_ordinary%2FIMG_1381.jpg&type=sc960_832",
-        alt: "user background image"
-      }
+      class: _vm.classes,
+      attrs: { src: _vm.imageObject.data.attributes.path, alt: _vm.alt }
     })
   ])
 }
@@ -50249,7 +50260,10 @@ var render = function() {
                   attrs: {
                     "image-width": "1500",
                     "image-height": "300",
-                    location: "cover"
+                    location: "cover",
+                    alt: "user background image",
+                    classes: "object-cover w-full",
+                    "user-image": _vm.user.data.attributes.cover_image
                   }
                 })
               ],
@@ -50263,7 +50277,24 @@ var render = function() {
                   "absolute flex items-center bottom-0 left-0 mb-8 ml-12 z-20"
               },
               [
-                _vm._m(0),
+                _c(
+                  "div",
+                  { staticClass: "w-32" },
+                  [
+                    _c("UploadableImage", {
+                      attrs: {
+                        "image-width": "1500",
+                        "image-height": "300",
+                        location: "profile",
+                        alt: "user profile image",
+                        classes:
+                          "object-cover w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg",
+                        "user-image": _vm.user.data.attributes.profile_image
+                      }
+                    })
+                  ],
+                  1
+                ),
                 _vm._v(" "),
                 _c("p", { staticClass: "text-2xl text-gray-100 ml-4" }, [
                   _vm._v(_vm._s(_vm.user.data.attributes.name))
@@ -50353,24 +50384,7 @@ var render = function() {
       )
     : _vm._e()
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("div", { staticClass: "w-32" }, [
-      _c("img", {
-        staticClass:
-          "object-cover w-32 h-32 border-4 border-gray-200 rounded-full shadow-lg",
-        attrs: {
-          src:
-            "https://cdn.pixabay.com/photo/2014/07/09/10/04/man-388104_960_720.jpg",
-          alt: "user profile image"
-        }
-      })
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 
 
