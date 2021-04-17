@@ -21,7 +21,7 @@ const getters = {
 };
 
 const actions = {
-    fetchNewsPosts({commit, state}) {
+    fetchNewsPosts ({commit, state}) {
         commit('setPostsStatus', 'loading');
 
         axios.get('/api/posts')
