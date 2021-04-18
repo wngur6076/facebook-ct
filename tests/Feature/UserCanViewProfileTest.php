@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -55,7 +56,7 @@ class UserCanViewProfileTest extends TestCase
                             'post_id' => $post->id,
                             'attributes' => [
                                 'body' => $post->first()->body,
-                                'image' => $post->first()->image,
+                                'image' => Storage::disk('public')->url($post->first()->image),
                                 'posted_at' => $post->first()->created_at->diffForHumans(),
                                 'posted_by' => [
                                     'data' => [

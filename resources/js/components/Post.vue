@@ -16,7 +16,7 @@
             </div>
         </div>
 
-        <div class="w-full" v-if="post.data.attributes.image">
+        <div class="w-full" v-if="post.data.attributes.image.length">
             <img :src="post.data.attributes.image" alt="post image" class="w-full">
         </div>
 

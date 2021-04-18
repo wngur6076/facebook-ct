@@ -2,10 +2,11 @@
 
 namespace Tests\Feature;
 
-use App\Models\Friend;
 use Tests\TestCase;
 use App\Models\Post;
 use App\Models\User;
+use App\Models\Friend;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class RetrievePostsTest extends TestCase
@@ -26,7 +27,6 @@ class RetrievePostsTest extends TestCase
             'status' => 1,
         ]);
 
-
         $response = $this->get('/api/posts');
 
         $response->assertStatus(200)
@@ -38,7 +38,7 @@ class RetrievePostsTest extends TestCase
                             'post_id' => $posts->last()->id,
                             'attributes' => [
                                 'body' => $posts->last()->body,
-                                'image' => $posts->last()->image,
+                                'image' => Storage::disk('public')->url($posts->last()->image),
                                 'posted_at' => $posts->last()->created_at->diffForHumans(),
                             ]
                         ]
@@ -49,7 +49,7 @@ class RetrievePostsTest extends TestCase
                             'post_id' => $posts->first()->id,
                             'attributes' => [
                                 'body' => $posts->first()->body,
-                                'image' => $posts->first()->image,
+                                'image' => Storage::disk('public')->url($posts->first()->image),
                                 'posted_at' => $posts->first()->created_at->diffForHumans(),
                             ]
                         ]
