@@ -36,6 +36,8 @@
 * TDD를 이용해서 게시글작성 -> 이미지 추가 -> 좋아요 추가 -> 댓글 추가 -> 친구 게시글 보기 이런 식으로 테스트코드를 작은 기능부터 추가해가는 방식의 중요성을 다시 한번 깨닫게 해주었다.
 * Json 구조 예시를 잘 보여주었다. [jsonapi.org](https://jsonapi.org/) 참고해서 설명해주었다.
 * Routes, Controllers, Endpoints 내 생각과 비교해보면서 고민해보았다.
+* Dropzone JS로 이미지 업로드
+* Laravel Passport를 사용한 인증
 * 프론트입장에서 생각해보는 계기가 되었다.
 
 
